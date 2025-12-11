@@ -2,6 +2,38 @@ import React from "react";
 import TaskCard from "./components/TaskCard";
 
 function App() {
+  const tasks = [
+    {
+      id: 1,
+      title: "Master react props",
+      status: "Completed",
+      dueDate: "Yesterday",
+      description:
+        "Understand how to pass data between components effectively using Props.",
+    },
+    {
+      id: 2,
+      title: "Learn array Mapping",
+      status: "In Progress",
+      dueDate: "Today",
+      description:
+        "Use .map() function to render a list of components dynamically",
+    },
+    {
+      id: 3,
+      title: "Build backend API",
+      status: "Pending",
+      dueDate: "Next Week",
+      description: "Setup Node.js and Express to serve real data from MongoDB",
+    },
+    {
+      id: 4,
+      title: "Practice Git Workflow",
+      status: "Pending",
+      dueDate: "Tommorrow",
+      description: "Learn branching, committing, and pushing code to Github.",
+    },
+  ];
   return (
     <div className="min-h-screen px-4 py-10 bg-gray-50">
       <div className="max-w-3xl mx-auto">
@@ -15,24 +47,15 @@ function App() {
 
         {/* task list view */}
         <div className="space-y-4">
-          <TaskCard
-            title="Setup React Environment"
-            status="Completed"
-            dueDate="Created: 2 hours ago"
-            description="Install Node.js, Setup Vite Project and configure Tailwind CSS successfully"
-          />
-          <TaskCard
-            title="Learn Props & Components"
-            status="In Progress"
-            dueDate="Due: Tomorrow"
-            description="Understand how to pass data from parent to child components using Props."
-          />
-          <TaskCard
-            title="Build Login Form"
-            status="Pending"
-            dueDate="Due: Next Week"
-            description="Create a responsive login form with validation using React Hook Form."
-          />
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              title={task.title}
+              status={task.status}
+              dueDate={task.dueDate}
+              description={task.description}
+            />
+          ))}
         </div>
       </div>
     </div>
