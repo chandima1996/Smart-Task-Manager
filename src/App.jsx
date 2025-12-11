@@ -73,7 +73,7 @@ function App() {
         {/* header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            My Tasks ({tasks.length})
+            My Personal Tasks ({tasks.length})
           </h1>
           <p className="mt-2 text-gray-500">
             Manage your daily goals efficiently
