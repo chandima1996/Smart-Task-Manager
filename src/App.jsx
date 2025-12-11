@@ -1,40 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TaskCard from "./components/TaskCard";
 import AddTaskForm from "./components/AddTaskForm";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Master react props",
-      status: "Completed",
-      dueDate: "Yesterday",
-      description:
-        "Understand how to pass data between components effectively using Props.",
-    },
-    {
-      id: 2,
-      title: "Learn array Mapping",
-      status: "In Progress",
-      dueDate: "Today",
-      description:
-        "Use .map() function to render a list of components dynamically",
-    },
-    {
-      id: 3,
-      title: "Build backend API",
-      status: "Pending",
-      dueDate: "Next Week",
-      description: "Setup Node.js and Express to serve real data from MongoDB",
-    },
-    {
-      id: 4,
-      title: "Practice Git Workflow",
-      status: "Pending",
-      dueDate: "Tommorrow",
-      description: "Learn branching, committing, and pushing code to Github.",
-    },
-  ]);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("smartTasks");
+
+    if (savedTasks) {
+      return JSON.parse(savedTasks);
+    } else {
+      return [
+        {
+          id: 1,
+          title: "Master react props",
+          status: "Completed",
+          dueDate: "Yesterday",
+          description:
+            "Understand how to pass data between components effectively using Props.",
+        },
+        {
+          id: 2,
+          title: "Learn array Mapping",
+          status: "In Progress",
+          dueDate: "Today",
+          description:
+            "Use .map() function to render a list of components dynamically",
+        },
+        {
+          id: 3,
+          title: "Build backend API",
+          status: "Pending",
+          dueDate: "Next Week",
+          description:
+            "Setup Node.js and Express to serve real data from MongoDB",
+        },
+        {
+          id: 4,
+          title: "Practice Git Workflow",
+          status: "Pending",
+          dueDate: "Tommorrow",
+          description:
+            "Learn branching, committing, and pushing code to Github.",
+        },
+      ];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("smartTasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const handleDelete = (id) => {
     const remainingTasks = tasks.filter((task) => task.id !== id);
