@@ -6,7 +6,7 @@ function TaskCard({ id, title, status, dueDate, description, onDelete }) {
     if (status === "In Progress") return "bg-blue-100 text-blue-700";
     return "bg-yellow-100 text-yellow-700";
   };
-  console.log("Component id is" + id);
+
   return (
     <div className="p-6 mb-4 transition-all bg-white border border-gray-100 shadow-lg rounded-xl hover:shadow-xl">
       <div className="flex items-start justify-between mb-4">

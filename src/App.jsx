@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TaskCard from "./components/TaskCard";
+import AddTaskForm from "./components/AddTaskForm";
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -37,20 +38,35 @@ function App() {
 
   const handleDelete = (id) => {
     const remainingTasks = tasks.filter((task) => task.id !== id);
-    console.log("Function called");
-    console.log(id);
     setTasks(remainingTasks);
+  };
+
+  const handleAddTask = (newTaskData) => {
+    const newTask = {
+      id: Date.now(),
+      title: newTaskData.title,
+      status: "Pending",
+      dueDate: newTaskData.dueDate || "No Date",
+      description: "New Task Added Manually",
+    };
+
+    setTasks([...tasks, newTask]);
+    console.log(tasks);
   };
   return (
     <div className="min-h-screen px-4 py-10 bg-gray-50">
       <div className="max-w-3xl mx-auto">
         {/* header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My Tasks</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            My Tasks ({tasks.length})
+          </h1>
           <p className="mt-2 text-gray-500">
             Manage your daily goals efficiently
           </p>
         </div>
+
+        <AddTaskForm onAdd={handleAddTask} />
 
         {/* task list view */}
         <div className="space-y-4">
