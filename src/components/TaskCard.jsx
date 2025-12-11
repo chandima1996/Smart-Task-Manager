@@ -1,35 +1,33 @@
 import React from "react";
 
-function TaskCard() {
+function TaskCard({ title, status, dueDate, description }) {
+  const getStatusColor = (status) => {
+    if (status === "Completed") return "bg-green-100 text-green-700";
+    if (status === "In Progress") return "bg-blue-100 text-blue-700";
+    return "bg-yellow-100 text-yellow-700";
+  };
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 mb-4">
-      {/* title and status badge */}
-      <div className="flex justify-between items-start mb-4">
+    <div className="p-6 mb-4 transition-all bg-white border border-gray-100 shadow-lg rounded-xl hover:shadow-xl">
+      <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="text-xl font-bold text-gray-800">
-            Learn react and tailwind
-          </h3>
-          <span className="text-sm text-gray-400">Created: 10 min ago</span>
+          <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+          <span className="text-sm text-gray-400">{dueDate}</span>
         </div>
 
-        {/* status badge */}
-        <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
-          In Progress
+        <span
+          className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+            status
+          )}`}
+        >
+          {status}
         </span>
       </div>
-
-      {/* description */}
-      <p className="text-gray-600 mb-6 leading-relaxed">
-        Complete the basic setup of the project using Vite, setup Tailwind CSS
-        and learn Git branching strategies
-      </p>
-
-      {/* footer */}
+      <p className="mb-6 leading-relaxed text-gray-600">{description}</p>
       <div className="flex justify-end gap-3 pt-4 border-t border-gray-50">
-        <button className="text-sm px-4 py-2 text-gray-500 hover:text-blue-600 font-medium hover:bg-blue-50 rounded-lg transition-colors">
+        <button className="px-4 py-2 text-sm font-medium text-gray-500 transition-colors rounded-lg hover:text-blue-600 hover:bg-blue-50">
           Edit
         </button>
-        <button className="text-sm px-4 py-2 text-red-500 hover:text-red-700 font-medium hover:bg-red-50 rounded-lg transition-colors">
+        <button className="px-4 py-2 text-sm font-medium text-red-500 transition-colors rounded-lg hover:text-red-600 hover:bg-red-50">
           Delete
         </button>
       </div>
