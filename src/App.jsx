@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import TaskCard from "./components/TaskCard";
 
 function App() {
-  const tasks = [
+  const [tasks, setTasks] = useState([
     {
       id: 1,
       title: "Master react props",
@@ -33,7 +33,14 @@ function App() {
       dueDate: "Tommorrow",
       description: "Learn branching, committing, and pushing code to Github.",
     },
-  ];
+  ]);
+
+  const handleDelete = (id) => {
+    const remainingTasks = tasks.filter((task) => task.id !== id);
+    console.log("Function called");
+    console.log(id);
+    setTasks(remainingTasks);
+  };
   return (
     <div className="min-h-screen px-4 py-10 bg-gray-50">
       <div className="max-w-3xl mx-auto">
@@ -47,13 +54,20 @@ function App() {
 
         {/* task list view */}
         <div className="space-y-4">
+          {tasks.length === 0 && (
+            <p className="py-10 text-center text-gray-500">
+              No tasks found. Good job 🏆
+            </p>
+          )}
           {tasks.map((task) => (
             <TaskCard
               key={task.id}
+              id={task.id}
               title={task.title}
               status={task.status}
               dueDate={task.dueDate}
               description={task.description}
+              onDelete={handleDelete}
             />
           ))}
         </div>
