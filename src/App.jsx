@@ -1,82 +1,61 @@
 import React, { useEffect, useState } from "react";
 import TaskCard from "./components/TaskCard";
 import AddTaskForm from "./components/AddTaskForm";
+import axios from "axios";
 
 function App() {
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("smartTasks");
+  const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    if (savedTasks) {
-      return JSON.parse(savedTasks);
-    } else {
-      return [
-        {
-          id: 1,
-          title: "Master react props",
-          status: "Completed",
-          dueDate: "Yesterday",
-          description:
-            "Understand how to pass data between components effectively using Props.",
-        },
-        {
-          id: 2,
-          title: "Learn array Mapping",
-          status: "In Progress",
-          dueDate: "Today",
-          description:
-            "Use .map() function to render a list of components dynamically",
-        },
-        {
-          id: 3,
-          title: "Build backend API",
-          status: "Pending",
-          dueDate: "Next Week",
-          description:
-            "Setup Node.js and Express to serve real data from MongoDB",
-        },
-        {
-          id: 4,
-          title: "Practice Git Workflow",
-          status: "Pending",
-          dueDate: "Tommorrow",
-          description:
-            "Learn branching, committing, and pushing code to Github.",
-        },
-      ];
-    }
-  });
+  const API_URL = "https://smart-task-manager-backend-sv8o.onrender.com";
 
   useEffect(() => {
-    localStorage.setItem("smartTasks", JSON.stringify(tasks));
-  }, [tasks]);
+    fetchTasks();
+  }, []);
 
-  const handleDelete = (id) => {
-    const remainingTasks = tasks.filter((task) => task.id !== id);
-    setTasks(remainingTasks);
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(API_URL);
+      setTasks(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+      setIsLoading(false);
+    }
   };
 
-  const handleAddTask = (newTaskData) => {
-    const newTask = {
-      id: Date.now(),
-      title: newTaskData.title,
-      status: "Pending",
-      dueDate: newTaskData.dueDate || "No Date",
-      description: "New Task Added Manually",
-    };
-
-    setTasks([...tasks, newTask]);
-    console.log(tasks);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      const remainingTasks = tasks.filter((task) => task._id !== id);
+      setTasks(remainingTasks);
+    } catch (error) {
+      console.error("Error deleting task", error);
+    }
   };
+
+  const handleAddTask = async (newTaskData) => {
+    try {
+      const response = await axios.post(API_URL, {
+        title: newTaskData.title,
+        dueDate: newTaskData.dueDate,
+        status: "Pending",
+      });
+
+      setTasks([...tasks, response.data]);
+    } catch (error) {
+      console.error("Error adding task", error);
+    }
+  };
+
   return (
     <div className="min-h-screen px-4 py-10 bg-gray-50">
       <div className="max-w-3xl mx-auto">
         {/* header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            My Tasks ({tasks.length})
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">Task Manager</h1>
           <p className="mt-2 text-gray-500">
-            Manage your daily goals efficiently
+            Connected to the MongoDB Atlas 🚀
           </p>
         </div>
 
@@ -84,15 +63,18 @@ function App() {
 
         {/* task list view */}
         <div className="space-y-4">
-          {tasks.length === 0 && (
+          {isLoading && (
+            <p className="text-center">Loading tasks from database...</p>
+          )}
+          {!isLoading && tasks.length === 0 && (
             <p className="py-10 text-center text-gray-500">
-              No tasks found. Good job 🏆
+              No tasks found. Start by adding one!
             </p>
           )}
           {tasks.map((task) => (
             <TaskCard
-              key={task.id}
-              id={task.id}
+              key={task._id}
+              id={task._id}
               title={task.title}
               status={task.status}
               dueDate={task.dueDate}
