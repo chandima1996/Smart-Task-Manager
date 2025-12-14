@@ -16,10 +16,19 @@ function App() {
   const fetchTasks = async () => {
     try {
       const response = await axios.get(API_URL);
-      setTasks(response.data);
+      console.log("API Response", response.data);
+
+      if (Array.isArray(response.data)) {
+        setTasks(response.data);
+      } else {
+        console.error("Data is not array!");
+        setTasks([]);
+      }
+
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching tasks", error);
+      setTasks([]);
       setIsLoading(false);
     }
   };
@@ -71,17 +80,18 @@ function App() {
               No tasks found. Start by adding one!
             </p>
           )}
-          {tasks.map((task) => (
-            <TaskCard
-              key={task._id}
-              id={task._id}
-              title={task.title}
-              status={task.status}
-              dueDate={task.dueDate}
-              description={task.description}
-              onDelete={handleDelete}
-            />
-          ))}
+          {Array.isArray(tasks) &&
+            tasks.map((task) => (
+              <TaskCard
+                key={task._id}
+                id={task._id}
+                title={task.title}
+                status={task.status}
+                dueDate={task.dueDate}
+                description={task.description}
+                onDelete={handleDelete}
+              />
+            ))}
         </div>
       </div>
     </div>
