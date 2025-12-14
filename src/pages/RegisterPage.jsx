@@ -2,33 +2,36 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-function LoginPage() {
+function RegisterPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+
     try {
       const response = await axios.post(
-        "https://smart-task-manager-backend-sv8o.onrender.com/api/users/login",
-        { email, password }
+        "https://smart-task-manager-backend-sv8o.onrender.com/api/users",
+        { name, email, password }
       );
       localStorage.setItem("userInfo", JSON.stringify(response.data));
+
       navigate("/");
       window.location.reload();
     } catch (error) {
-      setError("Something went wrong!", error);
+      setError("Registration Failed", error);
     }
   };
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white border border-gray-200 shadow-lg rounded-xl">
         <h2 className="mb-6 text-3xl font-bold text-center text-gray-800">
-          Welcome back ✋
+          Create Account 🚀
         </h2>
 
         {error && (
@@ -36,7 +39,19 @@ function LoginPage() {
             {error}
           </div>
         )}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-4">
+          <div>
+            <label className="block mb-1 font-medium text-gray-600">
+              Full Name
+            </label>
+            <input
+              type="text"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
           <div>
             <label className="block mb-1 font-medium text-gray-600">
               Email
@@ -62,24 +77,22 @@ function LoginPage() {
             />
           </div>
           <button
-            type="submit"
             className="w-full py-3 font-semibold text-white transition bg-blue-600 rounded-lg hover:bg-blue-700"
+            type="submit"
           >
-            Login
+            Register
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-500">
-          Don't have an account?
-          <Link
-            to="/register"
-            className="text-blue-600 cursor-pointer hover:underline"
-          >
-            Register here
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Login here
           </Link>
         </p>
       </div>
+      RegisterPage
     </div>
   );
 }
 
-export default LoginPage;
+export default RegisterPage;
