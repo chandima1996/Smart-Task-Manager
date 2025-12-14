@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TaskCard from "./components/TaskCard";
 import AddTaskForm from "./components/AddTaskForm";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -13,6 +14,8 @@ function App() {
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  const navigate = useNavigate();
 
   const fetchTasks = async () => {
     try {
@@ -58,17 +61,31 @@ function App() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userInfo");
+    navigate("/login");
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen px-4 py-10 font-sans bg-gray-50">
       <div className="max-w-3xl mx-auto">
         {/* header */}
-        <div className="mb-10 text-center">
-          <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-900">
-            Task <span className="text-blue-600">Master</span>
-          </h1>
-          <p className="text-lg text-gray-500">
-            Manage your daily goals efficiently.
-          </p>
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-900">
+              Task <span className="text-blue-600">Master</span>
+            </h1>
+            <p className="text-lg text-gray-500">
+              Manage your daily goals efficiently.
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 text-sm font-semibold text-white transition bg-red-500 rounded-lg hover:bg-red-600"
+          >
+            Logout
+          </button>
         </div>
 
         <AddTaskForm onAdd={handleAddTask} />
