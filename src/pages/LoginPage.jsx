@@ -14,7 +14,7 @@ function LoginPage() {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/users/login",
+        "https://smart-task-manager-backend-sv8o.onrender.com/api/users/login",
         { email, password }
       );
       localStorage.setItem("userInfo", JSON.stringify(response.data));
