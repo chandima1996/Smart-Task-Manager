@@ -90,7 +90,6 @@ function RegisterPage() {
           </Link>
         </p>
       </div>
-      RegisterPage
     </div>
   );
 }
