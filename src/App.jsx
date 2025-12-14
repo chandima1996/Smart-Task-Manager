@@ -7,7 +7,8 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const API_URL = "https://smart-task-manager-backend-sv8o.onrender.com";
+  const API_URL =
+    "https://smart-task-manager-backend-sv8o.onrender.com/api/tasks";
 
   useEffect(() => {
     fetchTasks();
