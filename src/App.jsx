@@ -59,13 +59,15 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-10 bg-gray-50">
+    <div className="min-h-screen px-4 py-10 font-sans bg-gray-50">
       <div className="max-w-3xl mx-auto">
         {/* header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Task Manager</h1>
-          <p className="mt-2 text-gray-500">
-            Connected to the MongoDB Atlas 🚀
+        <div className="mb-10 text-center">
+          <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-gray-900">
+            Task <span className="text-blue-600">Master</span>
+          </h1>
+          <p className="text-lg text-gray-500">
+            Manage your daily goals efficiently.
           </p>
         </div>
 
@@ -74,12 +76,17 @@ function App() {
         {/* task list view */}
         <div className="space-y-4">
           {isLoading && (
-            <p className="text-center">Loading tasks from database...</p>
+            <div className="py-10 text-center">
+              <div className="w-10 h-10 mx-auto border-b-2 border-blue-600 rounded-full animate-spin"></div>
+              <p className="mt-3 text-gray-500">Loading tasks...</p>
+            </div>
           )}
           {!isLoading && tasks.length === 0 && (
-            <p className="py-10 text-center text-gray-500">
-              No tasks found. Start by adding one!
-            </p>
+            <div className="py-12 text-center bg-white border border-gray-300 border-dashed rounded-xl">
+              <p className="text-xl text-gray-400">
+                ✨ No Tasks yet. Add one above!
+              </p>
+            </div>
           )}
           {Array.isArray(tasks) &&
             tasks.map((task) => (
@@ -94,6 +101,9 @@ function App() {
               />
             ))}
         </div>
+        <p className="mt-12 text-sm text-center text-gray-400">
+          ©2025 Task Master. Built with MERN stack.
+        </p>
       </div>
     </div>
   );

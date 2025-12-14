@@ -8,10 +8,10 @@ function TaskCard({ id, title, status, dueDate, description, onDelete }) {
   };
 
   return (
-    <div className="p-6 mb-4 transition-all bg-white border border-gray-100 shadow-lg rounded-xl hover:shadow-xl">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+    <div className="flex items-center justify-between p-5 duration-300 bg-white border-l-4 border-blue-500 shadow-sm hover:shadow-md rounded-xl group">
+      <div className="flex-1">
+        <div className="flex items-center gap-3 mb-1">
+          <h3 className="text-lg font-bold text-gray-800">{title}</h3>
           <span className="text-sm text-gray-400">{dueDate}</span>
         </div>
 
