@@ -1,6 +1,14 @@
 import React from "react";
 
-function TaskCard({ id, title, status, dueDate, description, onDelete }) {
+function TaskCard({
+  id,
+  title,
+  status,
+  dueDate,
+  description,
+  onDelete,
+  onEdit,
+}) {
   const getStatusColor = (status) => {
     if (status === "Completed") return "bg-green-100 text-green-700";
     if (status === "In Progress") return "bg-blue-100 text-blue-700";
@@ -26,29 +34,20 @@ function TaskCard({ id, title, status, dueDate, description, onDelete }) {
         </p>
       </div>
       <p className="mb-6 leading-relaxed text-gray-600">{description}</p>
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-50">
-        <button className="px-4 py-2 text-sm font-medium text-gray-500 transition-colors rounded-lg hover:text-blue-600 hover:bg-blue-50">
-          Edit
+      <div className="flex gap-2">
+        <button
+          onClick={onEdit}
+          className="p-2 text-gray-400 transition-colors rounded-full hover:text-blue-500 hover:bg-blue-50"
+          title="Edit Task"
+        >
+          ✏️
         </button>
         <button
           onClick={() => onDelete(id)}
           className="p-2 text-gray-400 transition-colors rounded-full hover:text-red-500 hover:bg-red-50"
           title="Delete Task"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
+          🗑️
         </button>
       </div>
     </div>

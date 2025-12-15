@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function App() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [editTask, setEditTask] = useState(null);
 
   const API_URL =
     "https://smart-task-manager-backend-sv8o.onrender.com/api/tasks";
@@ -17,10 +18,24 @@ function App() {
 
   const navigate = useNavigate();
 
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const token = userInfo?.token;
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    }
+  }, [navigate, userInfo]);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(API_URL);
-      console.log("API Response", response.data);
+      const response = await axios.get(API_URL, config);
 
       if (Array.isArray(response.data)) {
         setTasks(response.data);
@@ -37,9 +52,13 @@ function App() {
     }
   };
 
+  const handleEditClick = (task) => {
+    setEditTask(task);
+  };
+
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/${id}`);
+      await axios.delete(`${API_URL}/${id}`, config);
       const remainingTasks = tasks.filter((task) => task._id !== id);
       setTasks(remainingTasks);
     } catch (error) {
@@ -49,11 +68,15 @@ function App() {
 
   const handleAddTask = async (newTaskData) => {
     try {
-      const response = await axios.post(API_URL, {
-        title: newTaskData.title,
-        dueDate: newTaskData.dueDate,
-        status: "Pending",
-      });
+      const response = await axios.post(
+        API_URL,
+        {
+          title: newTaskData.title,
+          dueDate: newTaskData.dueDate,
+          status: "Pending",
+        },
+        config
+      );
 
       setTasks([...tasks, response.data]);
     } catch (error) {
@@ -65,6 +88,17 @@ function App() {
     localStorage.removeItem("userInfo");
     navigate("/login");
     window.location.reload();
+  };
+
+  const handleUpdateTask = async (id, updateData) => {
+    try {
+      const response = await axios.put(`${API_URL}/${id}`, updateData, config);
+
+      setTasks(tasks.map((task) => (task._id === id ? response.data : task)));
+      setEditTask(null);
+    } catch (error) {
+      console.error("Error updating task", error);
+    }
   };
 
   return (
@@ -88,7 +122,11 @@ function App() {
           </button>
         </div>
 
-        <AddTaskForm onAdd={handleAddTask} />
+        <AddTaskForm
+          onAdd={handleAddTask}
+          editTask={editTask}
+          onUpdate={handleUpdateTask}
+        />
 
         {/* task list view */}
         <div className="space-y-4">
@@ -115,6 +153,7 @@ function App() {
                 dueDate={task.dueDate}
                 description={task.description}
                 onDelete={handleDelete}
+                onEdit={() => handleEditClick(task)}
               />
             ))}
         </div>
