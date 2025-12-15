@@ -68,15 +68,7 @@ function App() {
 
   const handleAddTask = async (newTaskData) => {
     try {
-      const response = await axios.post(
-        API_URL,
-        {
-          title: newTaskData.title,
-          dueDate: newTaskData.dueDate,
-          status: "Pending",
-        },
-        config
-      );
+      const response = await axios.post(API_URL, newTaskData, config);
 
       setTasks([...tasks, response.data]);
     } catch (error) {
