@@ -87,7 +87,6 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
     navigate("/login");
-    window.location.reload();
   };
 
   const handleUpdateTask = async (id, updateData) => {
