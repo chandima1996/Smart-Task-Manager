@@ -13,6 +13,7 @@ function AddTaskForm({ onAdd, editTask, onUpdate }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (newTask === "") alert("Enter the valid task before submit");
     if (!newTask.trim()) return;
 
     if (editTask) {
