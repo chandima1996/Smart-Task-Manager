@@ -143,6 +143,8 @@ function App() {
                 status={task.status}
                 dueDate={task.dueDate}
                 description={task.description}
+                priority={task.priority}
+                category={task.category}
                 onDelete={handleDelete}
                 onEdit={() => handleEditClick(task)}
               />
