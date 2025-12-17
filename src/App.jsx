@@ -8,18 +8,21 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editTask, setEditTask] = useState(null);
+  const [filterPriority, setFilterPriority] = useState("All");
 
   const API_URL =
     "https://smart-task-manager-backend-sv8o.onrender.com/api/tasks";
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   const navigate = useNavigate();
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const token = userInfo?.token;
+
+  useEffect(() => {
+    if (token) {
+      fetchTasks();
+    }
+  }, [token, filterPriority]);
 
   useEffect(() => {
     if (!userInfo) {
@@ -34,8 +37,13 @@ function App() {
   };
 
   const fetchTasks = async () => {
+    setIsLoading(true);
     try {
-      const response = await axios.get(API_URL, config);
+      const url =
+        filterPriority === "All"
+          ? API_URL
+          : `${API_URL}?priority=${filterPriority}`;
+      const response = await axios.get(url, config);
 
       if (Array.isArray(response.data)) {
         setTasks(response.data);
@@ -119,6 +127,24 @@ function App() {
           onUpdate={handleUpdateTask}
         />
 
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-800">Your Tasks</h2>
+          <div className="flex gap-2 p-1 bg-gray-200 rounded-lg">
+            {["All", "High", "Medium", "Low"].map((p) => (
+              <button
+                key={p}
+                onClick={() => setFilterPriority(p)}
+                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                  filterPriority === p
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
         {/* task list view */}
         <div className="space-y-4">
           {isLoading && (
